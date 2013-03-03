@@ -36,13 +36,13 @@ public class JsonTest extends Controller {
 //		}
 
 		// IDで検索する
-    	List<Test> test = Test.find("ID",  jsonData.userId).fetch();
+//    	List<Test> test = Test.find("ID",  jsonData.userId).fetch();
+    	List<Test> test = Test.findAll();
     	List<String> list = new ArrayList();
     	for (Test value : test) {
     		list.add(value.name);
     	}
-    	String gsonStr = gson.toJson(list, ArrayList.class);
-    	System.out.println(gsonStr);
+//    	String gsonStr = gson.toJson(list, ArrayList.class);
 
     	renderJSON(list);
     }
