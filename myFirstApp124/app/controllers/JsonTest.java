@@ -1,21 +1,22 @@
 package controllers;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
 import models.Test;
-
-import play.db.DB;
 import play.mvc.Controller;
 
 import com.google.gson.Gson;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.Mongo;
 
 public class JsonTest extends Controller {
 
-    public static void getJson() {
+    public static void getJson() throws Exception {
 
     	// リクエストからJSONテキストを取得
     	String text = params.get("body");
@@ -23,6 +24,7 @@ public class JsonTest extends Controller {
 		// JSONをJAVAオブジェクトに変換
 		JsonData jsonData = gson.fromJson(text, JsonData.class);
 
+		// （ORACLE）JPA使用せずに検索
 //    	Connection conn = DB.getConnection();
 //    	List<String> list = new ArrayList();
 //    	try {
@@ -35,14 +37,29 @@ public class JsonTest extends Controller {
 //			e.printStackTrace();
 //		}
 
-		// IDで検索する
+		// （ORACLE）JPA使用で検索
 //    	List<Test> test = Test.find("ID",  jsonData.userId).fetch();
-    	List<Test> test = Test.findAll();
-    	List<String> list = new ArrayList();
-    	for (Test value : test) {
-    		list.add(value.name);
-    	}
-//    	String gsonStr = gson.toJson(list, ArrayList.class);
+//    	for (Test value : test) {
+//    		list.add(value.name);
+//    	}
+
+		List<String> list = new ArrayList();
+		// （MONGO）
+		Mongo mongo = new Mongo();
+		DB db = mongo.getDB("playtest");
+		db.authenticate("user", "password".toCharArray());
+		DBCollection col = db.getCollection("play");
+		BasicDBObject query = new BasicDBObject();
+		query.put("name", jsonData.userId);
+		DBCursor cursor = col.find(query);
+		while(cursor.hasNext()) {
+			list.add((String)cursor.next().get("email"));
+		}
+
+
+
+
+    	//    	String gsonStr = gson.toJson(list, ArrayList.class);
 
     	renderJSON(list);
     }
