@@ -1,0 +1,4 @@
+03 3 2013 14:08:08,082 INFO  ~ Starting C:\workspace\myFirstApp124\.
+03 3 2013 14:08:08,694 WARN  ~ You're running Play! in DEV mode
+03 3 2013 14:08:09,831 INFO  ~ Connected to jdbc:h2:mem:play;MODE=MYSQL;LOCK_MODE=0
+03 3 2013 14:08:09,844 INFO  ~ Application 'myFirstApp124' is now started !
