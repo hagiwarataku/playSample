@@ -11,6 +11,7 @@ public class Application extends Controller {
 
     public static void index() {
 
+	// test
     	String text = params.get("body");
 //    	System.out.println(text);
 
